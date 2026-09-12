@@ -1,0 +1,40 @@
+
+:root{
+  --bg:#040608;
+  --panel:rgba(8,12,17,.74);
+  --line:rgba(169,225,255,.16);
+  --text:#eef8fb;
+  --muted:#8ca1ad;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+#app{position:fixed;inset:0}
+canvas{display:block;width:100%;height:100%}
+.overlay{position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 42%,transparent 30%,rgba(0,0,0,.10) 62%,rgba(0,0,0,.54) 100%)}
+.topbar{position:fixed;top:18px;left:24px;right:24px;display:flex;justify-content:space-between;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#78909b;pointer-events:none}
+.topbar strong{color:#effaff}
+.panel{position:fixed;left:24px;bottom:24px;width:auto;padding:0;border:0;background:transparent;backdrop-filter:none;box-shadow:none;pointer-events:none}
+.eyebrow,.hud-title{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8fb2c0}
+h1{font-size:20px;margin:8px 0 9px}
+p{font-size:12px;line-height:1.45;color:#8da0aa;margin:0 0 12px}
+code{color:#d9f5ff}
+.controls{display:flex;gap:8px;flex-wrap:wrap;pointer-events:auto}
+button{border:1px solid rgba(180,230,250,.13);background:rgba(12,19,25,.56);color:#d9f2fa;border-radius:8px;padding:9px 12px;font-size:12px;cursor:pointer}
+button.active,button:hover{background:rgba(29,46,58,.68);border-color:rgba(190,235,255,.3)}
+.hud{display:none}
+.row{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid rgba(255,255,255,.05);font-size:12px}
+.row span:first-child{color:#82939d}
+.tip{position:fixed;right:24px;bottom:24px;color:#647983;font-size:10px;letter-spacing:.11em;text-transform:uppercase}
+.eyebrow,.panel h1,.panel #copy,.lesson{display:none}
+.lesson{margin:14px 0;padding:12px;border:1px solid rgba(169,225,255,.1);border-radius:8px;background:rgba(3,6,9,.24)}
+.lesson span{display:block;margin-bottom:4px;color:#8097a1;font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.lesson strong{display:block;margin-bottom:6px;font-size:14px;color:#edfaff}
+.lesson p{margin-bottom:0}
+.exposure-control{position:fixed;left:24px;bottom:82px;width:280px;padding:10px 12px;border:1px solid rgba(169,225,255,.13);border-radius:8px;background:rgba(5,10,14,.34);backdrop-filter:blur(16px);pointer-events:auto}
+.exposure-control label{display:block}
+.exposure-control label + label{margin-top:8px}
+.exposure-control span{display:flex;justify-content:space-between;margin-bottom:3px;color:#97aab3;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.exposure-control strong{color:#f0fbff;font-size:11px;text-transform:none}
+.exposure-control input{width:100%;accent-color:#a8dcef}
+.viewfinder-mode .panel{opacity:.8}
+@media(max-width:800px){.hud{right:12px;top:62px;width:245px}.panel{left:12px;bottom:12px;width:calc(100vw - 24px)}.topbar{left:14px;right:14px}.tip{display:none}}

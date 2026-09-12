@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Future Camera Lab</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div id="app"></div>
+  <div class="overlay"></div>
+
+  <header class="topbar">
+    <strong>Future Camera Lab</strong>
+    <span>Spatial Photography Learning</span>
+  </header>
+
+  <aside class="hud">
+    <div class="hud-title">3D Asset</div>
+    <div class="row"><span>Model</span><span id="modelName">Ingen modell laddad</span></div>
+    <div class="row"><span>Meshes</span><span id="meshCount">—</span></div>
+    <div class="row"><span>Triangles</span><span id="triCount">—</span></div>
+  </aside>
+
+  <section class="panel">
+    <div class="eyebrow">Immersive camera trainer</div>
+    <h1>Riktig 3D-kamera, lokalt.</h1>
+    <p id="copy">
+      Lägg din GLB-fil i <code>assets/models/camera.glb</code>.
+      När projektet körs via en lokal webbserver laddas modellen automatiskt.
+    </p>
+    <div class="lesson" id="lesson">
+      <span>Selected</span>
+      <strong id="selectedPart">None</strong>
+      <p id="selectedText">Click a camera control to begin.</p>
+      <div id="exposureControl" class="exposure-control">
+        <label>
+          <span>Aperture <strong id="apertureValue">f/2.8</strong></span>
+          <input id="apertureSlider" type="range" min="0" max="8" value="3" />
+        </label>
+        <label>
+          <span>Shutter <strong id="shutterValue">1/250</strong></span>
+          <input id="shutterSlider" type="range" min="0" max="11" value="5" />
+        </label>
+        <label>
+          <span>ISO <strong id="isoValue">ISO 100</strong></span>
+          <input id="isoSlider" type="range" min="0" max="6" value="0" />
+        </label>
+      </div>
+    </div>
+    <div class="controls">
+      <button id="orbit" class="active">360°</button>
+      <button id="front">Front</button>
+      <button id="rear">Rear</button>
+      <button id="viewfinder">Viewfinder</button>
+      <button id="lens">Lens</button>
+      <button id="top">Top</button>
+      <button id="reset">Reset</button>
+    </div>
+  </section>
+
+  <div class="tip">Drag = Rotate · Scroll = Zoom · Click = Learn</div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.166.1/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.166.1/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
