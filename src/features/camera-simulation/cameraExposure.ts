@@ -11,11 +11,14 @@ export type ShutterSpeedLabel =
   | "1/125"
   | "1/250"
   | "1/500"
+  | "1/640"
+  | "1/800"
   | "1/1000"
   | "1/2000"
   | "1/4000"
   | "1/6000"
-  | "1/8000";
+  | "1/8000"
+  | `1/${number}`;
 
 export interface ShutterSpeed {
   readonly label: ShutterSpeedLabel;
@@ -31,8 +34,13 @@ export interface CameraSettings {
 export interface ExposureResult {
   readonly exposureStops: number;
   readonly exposureMultiplier: number;
+  readonly displayBrightness: number;
+  readonly highlightClippingAmount: number;
+  readonly shadowCrushAmount: number;
   readonly isoNoiseAmount: number;
+  readonly isoColorNoiseAmount: number;
   readonly motionBlurAmount: number;
+  readonly motionStreakPx: number;
   readonly backgroundBlurPx: number;
 }
 
@@ -45,6 +53,8 @@ export const SHUTTER_SPEEDS: readonly ShutterSpeed[] = [
   { label: "1/125", seconds: 1 / 125 },
   { label: "1/250", seconds: 1 / 250 },
   { label: "1/500", seconds: 1 / 500 },
+  { label: "1/640", seconds: 1 / 640 },
+  { label: "1/800", seconds: 1 / 800 },
   { label: "1/1000", seconds: 1 / 1000 },
   { label: "1/2000", seconds: 1 / 2000 },
   { label: "1/4000", seconds: 1 / 4000 },
@@ -85,12 +95,20 @@ export function calculateExposure(settings: CameraSettings): ExposureResult {
   const shutterStops = Math.log2(settings.shutter.seconds / BASELINE_SHUTTER_SECONDS);
   const isoStops = Math.log2(settings.iso / BASELINE_ISO);
   const exposureStops = apertureStops + shutterStops + isoStops;
+  const exposureMultiplier = clamp(2 ** exposureStops, 0.08, 5.6);
+  const normalizedExposure = clamp((exposureStops + 5) / 10, 0, 1);
+  const motionStops = Math.max(0, Math.log2(settings.shutter.seconds / (1 / 125)));
 
   return {
     exposureStops,
-    exposureMultiplier: clamp(2 ** exposureStops, 0.14, 3.6),
+    exposureMultiplier,
+    displayBrightness: clamp(0.18 + normalizedExposure * 0.92, 0.12, 1.18),
+    highlightClippingAmount: clamp((exposureStops - 1.7) / 3.2, 0, 1),
+    shadowCrushAmount: clamp((-exposureStops - 2.1) / 3.4, 0, 1),
     isoNoiseAmount: clamp(isoStops / 6, 0, 1),
-    motionBlurAmount: clamp(Math.log2(settings.shutter.seconds / (1 / 125)) / 5, 0, 1),
+    isoColorNoiseAmount: clamp((isoStops - 2) / 4, 0, 1),
+    motionBlurAmount: clamp(motionStops / 5, 0, 1),
+    motionStreakPx: clamp(motionStops * 5.2, 0, 26),
     backgroundBlurPx: APERTURE_BLUR_MAP[settings.aperture]
   };
 }

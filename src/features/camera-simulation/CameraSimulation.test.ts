@@ -27,8 +27,13 @@ describe("calculateExposure", () => {
 
     expect(result.exposureStops).toBeCloseTo(0, 5);
     expect(result.exposureMultiplier).toBeCloseTo(1, 5);
+    expect(result.displayBrightness).toBeCloseTo(0.64, 2);
+    expect(result.highlightClippingAmount).toBe(0);
+    expect(result.shadowCrushAmount).toBe(0);
     expect(result.isoNoiseAmount).toBe(0);
+    expect(result.isoColorNoiseAmount).toBe(0);
     expect(result.motionBlurAmount).toBe(0);
+    expect(result.motionStreakPx).toBe(0);
     expect(result.backgroundBlurPx).toBe(10);
   });
 
@@ -40,8 +45,10 @@ describe("calculateExposure", () => {
     });
 
     expect(result.exposureStops).toBeCloseTo(3, 5);
-    expect(result.exposureMultiplier).toBe(3.6);
+    expect(result.exposureMultiplier).toBe(5.6);
+    expect(result.highlightClippingAmount).toBeGreaterThan(0);
     expect(result.isoNoiseAmount).toBeCloseTo(0.5, 5);
+    expect(result.isoColorNoiseAmount).toBeCloseTo(0.25, 5);
   });
 
   it("reduces exposure when aperture is stopped down", () => {
@@ -53,7 +60,20 @@ describe("calculateExposure", () => {
 
     expect(result.exposureStops).toBeCloseTo(-2, 5);
     expect(result.exposureMultiplier).toBeCloseTo(0.25, 5);
+    expect(result.shadowCrushAmount).toBe(0);
     expect(result.backgroundBlurPx).toBe(4);
+  });
+
+  it("crushes shadow detail when the image is heavily underexposed", () => {
+    const result = calculateExposure({
+      aperture: 16,
+      shutter: shutter("1/8000"),
+      iso: 100
+    });
+
+    expect(result.exposureStops).toBeLessThan(-10);
+    expect(result.exposureMultiplier).toBe(0.08);
+    expect(result.shadowCrushAmount).toBe(1);
   });
 
   it("adds motion blur for slow shutter speeds", () => {
@@ -65,6 +85,7 @@ describe("calculateExposure", () => {
 
     expect(result.exposureStops).toBeGreaterThan(5);
     expect(result.motionBlurAmount).toBeGreaterThan(0.9);
+    expect(result.motionStreakPx).toBeGreaterThan(20);
   });
 
   it("keeps very fast shutter speeds free from motion blur", () => {

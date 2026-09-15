@@ -4,7 +4,6 @@ const basePath = isGithubPages ? "/future-camera-lab" : "";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: "export",
   basePath,
   assetPrefix: basePath,
   env: {
@@ -12,7 +11,8 @@ const nextConfig = {
   },
   images: {
     unoptimized: true
-  }
+  },
+  ...(isGithubPages ? { output: "export" } : {})
 };
 
 export default nextConfig;
